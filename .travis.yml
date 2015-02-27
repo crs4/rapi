@@ -1,3 +1,7 @@
+
+# enable docker builds 
+sudo: false
+
 language: python
 python:
     - "2.7"
@@ -5,8 +9,6 @@ python:
 # The version of SWIG packaged with the TravisCI VM's (2.0.4) doesn't work for us
 # - sudo apt-get install -qq swig
 before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install libpcre3-dev
     - wget http://prdownloads.sourceforge.net/swig/swig-3.0.2.tar.gz -O - | tar xzf -
     - (cd swig-3.0.2/ && ./configure -prefix=$HOME --without-alllang --with-python && make -j 2 && make install) >/dev/null
     - export PATH=$HOME/bin:$PATH
