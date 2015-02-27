@@ -13,6 +13,7 @@ before_install:
     - (cd swig-3.0.2/ && ./configure -prefix=$HOME --without-alllang --with-python && make -j 2 && make install) >/dev/null
     - export PATH=$HOME/bin:$PATH
     - swig -version
+    - ulimit -l
 
 install:
     - make clean all
