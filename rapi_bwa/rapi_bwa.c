@@ -672,6 +672,16 @@ const char* rapi_plugin_version(void)
 	return RAPI_BWA_PLUGIN_VERSION;
 }
 
+rapi_error_t rapi_ref_init( rapi_ref * ref_struct )
+{
+	if ( NULL == ref_struct )
+		return RAPI_PARAM_ERROR;
+
+	memset(ref_struct, 0, sizeof(*ref_struct));
+
+  return RAPI_NO_ERROR;
+}
+
 /* Load Reference */
 rapi_error_t rapi_ref_load( const char * reference_path, rapi_ref * ref_struct )
 {

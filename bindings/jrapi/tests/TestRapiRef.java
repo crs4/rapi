@@ -50,7 +50,8 @@ public class TestRapiRef
     optsObj = new Opts();
     optsObj.setShareRefMem(false);
     Rapi.init(optsObj);
-    refObj = new Ref(TestUtils.RELATIVE_MINI_REF);
+    refObj = new Ref();
+    refObj.load(TestUtils.RELATIVE_MINI_REF);
   }
 
   @After

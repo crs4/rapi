@@ -67,7 +67,8 @@ public class TestRapiAligner
 
     // load the reference
     miniRefPath = new File(jrapiBaseDir, TestUtils.RELATIVE_MINI_REF);
-    refObj = new Ref(miniRefPath.getAbsolutePath());
+    refObj = new Ref();
+    refObj.load(miniRefPath.getAbsolutePath());
 
     aligner = new AlignerState(rapiOpts);
     aligner.alignReads(refObj, reads);

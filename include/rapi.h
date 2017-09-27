@@ -339,6 +339,11 @@ const char* rapi_aligner_version(void);
 /** Get aligner plug-in version */
 const char* rapi_plugin_version(void);
 
+/**
+ * Initialize a new reference struct.
+ */
+rapi_error_t rapi_ref_init( rapi_ref * ref_struct );
+
 /** Load a reference.
  *
  * The implementation may configure its behaviour based on the options passed

@@ -241,6 +241,7 @@ const char* rapi_plugin_version(void);
 
 
 %rename("%(lowercamelcase)s") assembly_identifier;
+%rename("load") rapi_ref::load_ref;
 
 // rapi_contig provides a view into the rapi_ref.  It must
 // not be freed, and it should only be constructed by the rapi_ref.
@@ -269,7 +270,6 @@ public java.util.Iterator<Contig> iterator() {
 }
 ";
 
-%nodefaultctor rapi_ref;
 /**
  * A Reference sequence.  The object provides access
  * to some meta informatio about the reference and its
@@ -286,21 +286,32 @@ typedef struct rapi_ref {
   }
 }
 
-%extend rapi_ref {
-  rapi_ref(JNIEnv* jenv, const char* reference_path) {
-    if (reference_path == NULL) {
-        do_rapi_throw(jenv, RAPI_TYPE_ERROR, "Reference path cannot be None");
-        return NULL;
-    }
+Set_exception_from_error_t(rapi_ref::load_ref);
 
+%extend rapi_ref {
+  rapi_ref(JNIEnv* jenv) {
     rapi_ref* ref = (rapi_ref*) rapi_malloc(jenv, sizeof(rapi_ref));
     if (!ref) return NULL;
 
-    int error = rapi_ref_load(reference_path, ref);
-    if (error == RAPI_NO_ERROR)
+    rapi_error_t error = rapi_ref_init(ref);
+    if (error == RAPI_NO_ERROR) {
       return ref;
+    }
     else {
       free(ref);
+      do_rapi_throw(jenv, error, "Error initializing reference structure");
+      return NULL;
+    }
+  }
+
+  rapi_error_t load_ref(const char* reference_path) {
+    if (reference_path == NULL) {
+        PERROR("%s", "Reference path cannot be NULL");
+        return RAPI_TYPE_ERROR;
+    }
+
+    rapi_error_t error = rapi_ref_load(reference_path, $self);
+    if (error != RAPI_NO_ERROR) {
       const char* msg;
       if (error == RAPI_MEMORY_ERROR)
         msg = "Insufficient memory available to load the reference.";
@@ -308,10 +319,9 @@ typedef struct rapi_ref {
         msg = "Library failed to load reference. Check paths and reference format.";
       else
         msg = "";
-
-      do_rapi_throw(jenv, error, msg);
-      return NULL;
+      PERROR("%s", msg);
     }
+    return error;
   }
 
   /** Manually unload this Ref from memory.  This method lets you control when to

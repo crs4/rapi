@@ -148,7 +148,8 @@ public class rapi_example
     parseArgs(args);
     Batch reads = new Batch(2);
     log.debug("Created batch");
-    Ref ref = new Ref(refPath);
+    Ref ref = new Ref();
+    ref.load(refPath);
     log.debug("Loaded reference from " + refPath);
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
