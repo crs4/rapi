@@ -965,6 +965,13 @@ struct rapi_aligner_state;
 
 %nodefaultctor  rapi_aligner_state;
 
+// inject default contructor into Java class
+%typemap(javacode) struct rapi_aligner_state "
+public AlignerState() {
+  this(null);
+}
+";
+
 typedef struct rapi_aligner_state {} rapi_aligner_state; //< opaque structure.  Aligner can use for whatever it wants.
 
 Set_exception_from_error_t(rapi_aligner_state::alignReads);

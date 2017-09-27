@@ -87,6 +87,12 @@ public class TestRapiAligner
   }
 
   @Test
+  public void testAlignerStateDefaultCtr() throws RapiException
+  {
+    aligner = new AlignerState();
+  }
+
+  @Test
   public void testReadAttributes() throws RapiException
   {
     Read rapiRead = reads.getRead(0, 0);
