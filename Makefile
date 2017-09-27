@@ -57,7 +57,8 @@ distclean: clean
 	rm -rf "$(PWD)/bwa-auto-build"
 
 tests: pyrapi jrapi
-	python bindings/pyrapi/tests/test_pyrapi.py
+	$(eval PyBuildPath := $(shell find bindings/pyrapi/build  -maxdepth 1 -name 'lib.*' | head -n 1) )
+	PYTHONPATH=${PYTHONPATH}:$(PyBuildPath) python bindings/pyrapi/tests/test_pyrapi.py
 	(cd bindings/jrapi && ant run-tests)
 
 .PHONY: clean distclean tests pyrapi jrapi rapi_bwa example
